@@ -87,6 +87,7 @@
     <section id="galeri" class="p-6">
         <h2 class="text-lg font-bold mb-4">Galeri Inspirasi & Tutorial</h2>
         
+        <!-- Tulisan Loading -->
         <div id="loading" class="text-center py-8 text-yogyaOrange font-semibold animate-pulse">
             Memuat gambar dari server...
         </div>
@@ -143,7 +144,7 @@
 </div>
 
 <script>
-    // MASUKKAN URL WEB APP ANDA
+    // URL API sudah di-set secara permanen di sini
     const API_URL = 'https://script.google.com/macros/s/AKfycbxPjSIKxsWI7SI6fNgmWVMzfMGyFU60ZnoeiYPZUmnqIsB4S3NsP9JbBev9oCMs7YIgvw/exec'; 
 
     async function fetchData() {
@@ -154,12 +155,18 @@
             const imageGallery = document.getElementById('image-gallery');
             const loading = document.getElementById('loading');
 
+            // Menghilangkan tulisan loading jika data berhasil ditarik
             loading.style.display = 'none';
+
+            // Jika folder Google Drive kosong
+            if(data.length === 0) {
+                imageGallery.innerHTML = '<p class="text-center text-gray-500 col-span-2 py-4">Belum ada foto desain. Silakan upload ke Drive.</p>';
+                return;
+            }
 
             data.forEach(item => {
                 if(item.type === 'image') {
                     const imgDiv = document.createElement('div');
-                    // Menambahkan fungsi onclick untuk membuka modal
                     imgDiv.innerHTML = `
                         <img src="${item.url}" alt="${item.name}" loading="lazy" 
                              class="w-full h-40 object-cover rounded-xl shadow-sm border border-gray-100 cursor-pointer hover:opacity-80 transition"
@@ -170,13 +177,16 @@
             });
         } catch (error) {
             console.error("Error fetching data:", error);
-            document.getElementById('loading').innerText = "Gagal memuat gambar.";
+            // Menampilkan pesan error di layar jika gagal tarik data
+            document.getElementById('loading').innerHTML = `
+                <span class="text-red-500">Gagal memuat gambar dari server.</span><br>
+                <span class="text-xs text-gray-500">Pastikan Folder Google Drive sudah di-share "Anyone with the link".</span>
+            `;
         }
     }
 
-    if(API_URL !== 'https://script.google.com/macros/s/AKfycbxPjSIKxsWI7SI6fNgmWVMzfMGyFU60ZnoeiYPZUmnqIsB4S3NsP9JbBev9oCMs7YIgvw/exec'){
-        fetchData();
-    }
+    // Langsung jalankan fungsi tarik data
+    fetchData();
 
     // --- FUNGSI MODAL & ZOOM ---
     const modal = document.getElementById('image-modal');
@@ -187,14 +197,14 @@
     function openModal(imgSrc) {
         modalImage.src = imgSrc;
         modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Kunci scroll halaman utama
-        resetZoom(); // Pastikan gambar tidak dalam keadaan ter-zoom saat baru dibuka
+        document.body.style.overflow = 'hidden'; 
+        resetZoom(); 
     }
 
     // Menutup Modal
     function closeModal() {
         modal.classList.add('hidden');
-        document.body.style.overflow = 'auto'; // Kembalikan scroll halaman utama
+        document.body.style.overflow = 'auto'; 
         modalImage.src = ""; 
     }
 
@@ -209,7 +219,7 @@
     function toggleZoom() {
         isZoomed = !isZoomed;
         if (isZoomed) {
-            modalImage.style.transform = 'scale(2)'; // Membesarkan 2x lipat
+            modalImage.style.transform = 'scale(2)'; 
             modalImage.classList.replace('cursor-zoom-in', 'cursor-zoom-out');
         } else {
             resetZoom();
