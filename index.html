@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -22,7 +21,6 @@
         }
     </script>
     <style>
-        /* Membatasi lebar agar terlihat seperti tampilan HP meski dibuka di PC */
         body { background-color: #f3f4f6; }
         .mobile-container {
             max-width: 480px;
@@ -30,28 +28,29 @@
             background-color: #FDFBF7;
             min-height: 100vh;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            position: relative;
         }
+        /* Custom scrollbar untuk pop-up zoom */
+        .zoom-container::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="text-gray-800 font-sans">
 
 <div class="mobile-container">
     
-    <!-- 1. Header Logo Yogya (Putih) -->
+    <!-- 1. Header -->
     <header class="bg-white p-4 flex justify-center border-b border-gray-200">
-        <!-- Mengambil gambar langsung dari folder Git -->
-        <img src="logo_yogya_garut.png" alt="Yogya Garut" class="h-10 object-contain">
+        <img src="logo-yogya.png" alt="Yogya Garut" class="h-10 object-contain">
     </header>
 
-    <!-- 2. Hero Section Logo Bread.co (Oranye) -->
+    <!-- 2. Hero Section -->
     <section class="bg-yogyaOrange text-white text-center p-8 rounded-b-[2rem] shadow-md">
         <div class="flex justify-center mb-4">
-             <!-- Mengambil gambar langsung dari folder Git -->
             <img src="bread.png" alt="Bread.co" class="h-16 object-contain">
         </div>
         <h1 class="text-2xl font-bold mb-2">Wujudkan My Dream Cake!</h1>
-        <p class="text-sm opacity-90 mb-6">Jadikan cake ini kanvas kreatifmu. Bebas pilih warna, bebas hias sesukamu.</p>
-        <a href="#galeri" class="bg-yogyaGreen text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition">
+        <p class="text-sm opacity-90 mb-6">Jadikan cake 11cm ini kanvas kreatifmu. Bebas pilih warna, bebas hias sesukamu.</p>
+        <a href="#galeri" class="bg-yogyaGreen text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition inline-block">
             Lihat Inspirasi Desain
         </a>
     </section>
@@ -84,35 +83,27 @@
         </div>
     </section>
 
-    <!-- 4. Galeri & Tutorial (Data dari Google Drive / Apps Script) -->
+    <!-- 4. Galeri & Tutorial -->
     <section id="galeri" class="p-6">
         <h2 class="text-lg font-bold mb-4">Galeri Inspirasi & Tutorial</h2>
         
-        <!-- Loading State -->
         <div id="loading" class="text-center py-8 text-yogyaOrange font-semibold animate-pulse">
             Memuat gambar dari server...
         </div>
 
         <!-- Container untuk Gambar (Grid) -->
         <div id="image-gallery" class="grid grid-cols-2 gap-3 mb-8">
-            <!-- Gambar dari Drive akan muncul di sini -->
+            <!-- Gambar dimuat oleh JS -->
         </div>
 
-        
-<!-- HIGHLIGHT: SECTION YOUTUBE TUTORIAL -->
-
-        <!-- HIGHLIGHT: SECTION YOUTUBE TUTORIAL -->
+        <!-- Section Tutorial YouTube Shorts -->
         <h2 class="text-lg font-bold mb-4 mt-8 border-b-2 border-yogyaOrange pb-2 inline-block">Video Tutorial Pilihan</h2>
         
         <div class="space-y-6">
-            
-            <!-- Box Video Shorts -->
             <div class="bg-white p-4 rounded-2xl shadow-md border-l-4 border-yogyaOrange">
                 <h3 class="font-bold text-yogyaOrange mb-1">🍰 Inspirasi Menghias Dream Cake</h3>
-                <p class="text-xs text-gray-500 mb-4">Tonton tutorial Bunga singkat dan mudah ini.</p>
+                <p class="text-xs text-gray-500 mb-4">Tonton tutorial singkat dan mudah ini.</p>
                 
-                <!-- Iframe YouTube Khusus Shorts (Rasio 9:16 Vertikal) -->
-                <!-- mx-auto digunakan agar video berada di tengah -->
                 <div class="aspect-[9/16] w-full max-w-[280px] mx-auto">
                     <iframe class="w-full h-full rounded-xl shadow-inner" 
                             src="https://www.youtube.com/embed/yvwwFmciJpo" 
@@ -122,27 +113,6 @@
                     </iframe>
                 </div>
             </div>
-            
-       <!-- Box Video Shorts II-->
-            <div class="bg-white p-4 rounded-2xl shadow-md border-l-4 border-yogyaOrange">
-                <h3 class="font-bold text-yogyaOrange mb-1">🍰 Inspirasi Menghias Dream Cake</h3>
-                <p class="text-xs text-gray-500 mb-4">Tonton Tutorial Tulisan HBD dan love</p>
-                
-                <!-- Iframe YouTube Khusus Shorts (Rasio 9:16 Vertikal) -->
-                <!-- mx-auto digunakan agar video berada di tengah -->
-                <div class="aspect-[9/16] w-full max-w-[280px] mx-auto">
-                    <iframe class="w-full h-full rounded-xl shadow-inner" 
-                            src="https://www.youtube.com/embed/j4aCk8Mk1vk" 
-                            title="Tutorial My Dream Cake" frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            allowfullscreen>
-                    </iframe>
-                </div>
-            </div>
-        <!-- Container untuk Video Tutorial -->
-        <h2 class="text-lg font-bold mb-4 hidden" id="video-title">Tutorial Menghias</h2>
-        <div id="video-gallery" class="space-y-4">
-            <!-- Video dari Drive akan muncul di sini -->
         </div>
     </section>
 
@@ -152,11 +122,29 @@
         <p class="text-xs text-gray-500 mb-4">Foto karya My Dream Cake buatanmu dan upload ke Instagram! Jangan lupa tag <strong>@YogyaGarut</strong>.</p>
     </footer>
 
+    <!-- POP-UP MODAL (LIGHTBOX) -->
+    <div id="image-modal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-90 flex items-center justify-center p-4 transition-opacity duration-300">
+        <!-- Tombol Close -->
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-4xl font-bold bg-black bg-opacity-50 w-12 h-12 rounded-full flex items-center justify-center hover:bg-yogyaOrange transition z-50">
+            &times;
+        </button>
+        
+        <!-- Instruksi Zoom -->
+        <p class="absolute top-6 left-0 right-0 text-center text-white text-sm opacity-70 pointer-events-none z-40">Tap gambar untuk Zoom</p>
+
+        <!-- Area Gambar Modal -->
+        <div class="zoom-container overflow-auto w-full h-full flex items-center justify-center" onclick="closeIfClickOutside(event)">
+            <img id="modal-image" src="" alt="Zoomed Image" 
+                 class="max-w-full max-h-screen object-contain transition-transform duration-300 cursor-zoom-in rounded-md shadow-2xl" 
+                 onclick="toggleZoom()">
+        </div>
+    </div>
+
 </div>
 
 <script>
-    // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI NANTI
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxPjSIKxsWI7SI6fNgmWVMzfMGyFU60ZnoeiYPZUmnqIsB4S3NsP9JbBev9oCMs7YIgvw/exec'; 
+    // MASUKKAN URL WEB APP ANDA
+    const API_URL = 'PASTE_URL_WEB_APP_ANDA_DISINI'; 
 
     async function fetchData() {
         try {
@@ -164,40 +152,75 @@
             const data = await response.json();
             
             const imageGallery = document.getElementById('image-gallery');
-            const videoGallery = document.getElementById('video-gallery');
             const loading = document.getElementById('loading');
-            const videoTitle = document.getElementById('video-title');
 
             loading.style.display = 'none';
 
             data.forEach(item => {
                 if(item.type === 'image') {
                     const imgDiv = document.createElement('div');
+                    // Menambahkan fungsi onclick untuk membuka modal
                     imgDiv.innerHTML = `
                         <img src="${item.url}" alt="${item.name}" loading="lazy" 
-                             class="w-full h-40 object-cover rounded-xl shadow-sm border border-gray-100">
+                             class="w-full h-40 object-cover rounded-xl shadow-sm border border-gray-100 cursor-pointer hover:opacity-80 transition"
+                             onclick="openModal('${item.url}')">
                     `;
                     imageGallery.appendChild(imgDiv);
-                } else if (item.type === 'video') {
-                    videoTitle.classList.remove('hidden');
-                    const vidDiv = document.createElement('div');
-                    vidDiv.innerHTML = `
-                        <video src="${item.url}" autoplay loop muted playsinline 
-                               class="w-full rounded-xl shadow-md border border-gray-100"></video>
-                        <p class="text-xs text-center text-gray-500 mt-2">${item.name.split('.')[0]}</p>
-                    `;
-                    videoGallery.appendChild(vidDiv);
                 }
             });
-
         } catch (error) {
             console.error("Error fetching data:", error);
-            document.getElementById('loading').innerText = "Belum ada gambar / Gagal memuat data.";
+            document.getElementById('loading').innerText = "Gagal memuat gambar.";
         }
     }
 
-    if(API_URL !== 'PASTE_URL_WEB_APP_ANDA_DISINI'){
+    if(API_URL !== 'https://script.google.com/macros/s/AKfycbxPjSIKxsWI7SI6fNgmWVMzfMGyFU60ZnoeiYPZUmnqIsB4S3NsP9JbBev9oCMs7YIgvw/exec'){
         fetchData();
+    }
+
+    // --- FUNGSI MODAL & ZOOM ---
+    const modal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image');
+    let isZoomed = false;
+
+    // Membuka Modal
+    function openModal(imgSrc) {
+        modalImage.src = imgSrc;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Kunci scroll halaman utama
+        resetZoom(); // Pastikan gambar tidak dalam keadaan ter-zoom saat baru dibuka
+    }
+
+    // Menutup Modal
+    function closeModal() {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto'; // Kembalikan scroll halaman utama
+        modalImage.src = ""; 
+    }
+
+    // Menutup jika area luar gambar diklik
+    function closeIfClickOutside(event) {
+        if (event.target !== modalImage) {
+            closeModal();
+        }
+    }
+
+    // Fungsi klik untuk Zoom In / Zoom Out
+    function toggleZoom() {
+        isZoomed = !isZoomed;
+        if (isZoomed) {
+            modalImage.style.transform = 'scale(2)'; // Membesarkan 2x lipat
+            modalImage.classList.replace('cursor-zoom-in', 'cursor-zoom-out');
+        } else {
+            resetZoom();
+        }
+    }
+
+    // Reset Zoom ke ukuran normal
+    function resetZoom() {
+        isZoomed = false;
+        modalImage.style.transform = 'scale(1)';
+        modalImage.classList.replace('cursor-zoom-out', 'cursor-zoom-in');
     }
 </script>
 
